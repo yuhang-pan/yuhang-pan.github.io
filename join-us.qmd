@@ -1,0 +1,36 @@
+---
+title: "Join Us"
+---
+
+## Openings
+
+I welcome motivated students and research assistants interested in:
+- Environmental economics
+- Climate & health
+- AI & development
+- ESG and corporate behavior
+
+## How to Apply
+
+Please email:
+- CV
+- (Optional) transcript
+- A short description of your interests and relevant skills
+- (Optional) writing sample / code sample
+
+**Email:** <your-email@domain.com>
+
+## What helps
+
+- Stata / R / Python
+- Empirical methods and causal inference
+- GIS / remote sensing (a plus)
+- Clear writing and reliability
+
+## FAQ
+
+**Do you have RA positions year-round?**  
+Describe your typical cycle.
+
+**Can undergraduates apply?**  
+Yes, if they can commit X hours/week.
