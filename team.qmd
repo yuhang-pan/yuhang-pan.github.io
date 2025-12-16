@@ -1,0 +1,16 @@
+---
+title: "Team"
+---
+
+## Team
+
+### Faculty
+- **Yuhang Pan** — Environmental & Health Economics  
+  [CV](files/cv.pdf) · [GitHub](https://github.com/yuhang-pan) · [Scholar](#)
+
+### Students
+- **Name** (PhD) — topic… · [Homepage](#)
+- **Name** (MA) — topic… · [Homepage](#)
+
+### Research Assistants / Affiliates
+- **Name** — topic… · [Link](#)
