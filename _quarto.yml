@@ -6,17 +6,17 @@ website:
   title: "Yuhang Pan"
   navbar:
     left:
-      - href: index.qmd
+      - href: index.html
         text: Home
-      - href: working-papers.qmd
+      - href: working-papers.html
         text: Working Papers
-      - href: publications.qmd
+      - href: publications.html
         text: Publications
-      - href: teaching.qmd
+      - href: teaching.html
         text: Teaching
-      - href: team.qmd
+      - href: team.html
         text: Team
-      - href: join-us.qmd
+      - href: join-us.html
         text: Join Us
     right:
       - icon: github
