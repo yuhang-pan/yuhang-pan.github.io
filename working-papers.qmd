@@ -4,7 +4,8 @@ title: "Working Papers"
 
 ## Working Papers
 
-1. **Moonlighting and Workplace Performance: Evidence from Teledoctor in China**  
+1. **Prenatal Air Pollution Exposure and Early-Childhood Cognition: The Role of Micronutrient Powder Intervention**
+   * R&R at the Journal of the Association of Environmental and Resource Economists *
    *with ...*  
    [PDF](#) · [Code](#) · [Slides](#)
 
