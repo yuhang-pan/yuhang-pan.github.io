@@ -1,0 +1,13 @@
+---
+title: "Working Papers"
+---
+
+## Working Papers
+
+1. **Moonlighting and Workplace Performance: Evidence from Teledoctor in China**  
+   *with ...*  
+   [PDF](#) · [Code](#) · [Slides](#)
+
+2. **Chinese AI Aid and Local Development: Evidence from City-Level Projects**  
+   *with ...*  
+   [PDF](#) · [Replication](#)
