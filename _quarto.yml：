@@ -1,0 +1,25 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Yuhang Pan"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: working-papers.qmd
+        text: Working Papers
+      - href: publications.qmd
+        text: Publications
+      - href: teaching.qmd
+        text: Teaching
+      - href: team.qmd
+        text: Team
+      - href: join-us.qmd
+        text: Join Us
+
+format:
+  html:
+    theme: cosmo
+    toc: true
