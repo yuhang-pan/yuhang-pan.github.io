@@ -1,11 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Yuhang Pan</title>
+  <style>
+    :root { --fg:#111; --muted:#555; --bg:#fff; --link:#0b57d0; --border:#e6e6e6; }
+    body{ margin:0; background:var(--bg); color:var(--fg);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,"Noto Sans",sans-serif; line-height:1.55; }
+    .wrap{ max-width: 860px; margin: 0 auto; padding: 42px 18px 70px; }
+    header{ display:flex; justify-content:space-between; align-items:flex-start; gap:18px; flex-wrap:wrap; }
+    h1{ margin:0; font-size:34px; letter-spacing:0.2px; }
+    .meta{ color:var(--muted); margin-top:6px; }
+    nav a{ margin-right:14px; color:var(--link); text-decoration:none; }
+    nav a:hover{ text-decoration:underline; }
+    section{ margin-top:26px; padding-top:22px; border-top:1px solid var(--border); }
+    h2{ margin:0 0 10px; font-size:18px; }
+    ul{ margin:10px 0 0 18px; padding:0; }
+    li{ margin:8px 0; }
+    .small{ color:var(--muted); font-size:14px; }
+    .pill{ display:inline-block; border:1px solid var(--border); padding:2px 10px; border-radius:999px; margin:6px 8px 0 0; font-size:13px; color:var(--muted); }
+    .two{ display:grid; grid-template-columns: 1.2fr 0.8fr; gap:22px; }
+    @media (max-width: 780px){ .two{ grid-template-columns:1fr; } }
+    footer{ margin-top:40px; color:var(--muted); font-size:13px; }
+    .pub-title{ font-weight:600; }
+  </style>
 </head>
 <body>
-  <h1>Yuhang Pan</h1>
-  <p>This is my personal website.</p>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Yuhang Pan</h1>
+        <div class="meta">
+          Economist · Environmental & Health Economics · Digital Technology and Development
+        </div>
+        <div class="small" style="margin-top:10px;">
+          <!-- TODO: customize these lines -->
+          Peking University · Beijing, China<br/>
+          Email: <a href="mailto:YOUR_EMAIL">YOUR_EMAIL</a>
+        </div>
+      </div>
+
+      <nav aria-label="Links">
+        <!-- Replace / add links you actually use -->
+        <a href="https://github.com/yuhang-pan">GitHub</a>
+        <a href="#" title="Add your Google Scholar link">Scholar</a>
+        <a href="#" title="Add your CV PDF link">CV</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section id="about">
+      <h2>About</h2>
+      <p>
+        I am an economist working at the intersection of environmental economics, health, and development.
+        My research studies how environmental risks and new technologies shape behavior, productivity, and inequality,
+        with a focus on China and global policy-relevant settings.
+      </p>
+      <div>
+        <span class="pill">Climate & Health</span>
+        <span class="pill">Air & Water Quality</span>
+        <span class="pill">Digital Health</span>
+        <span class="pill">AI & Development</span>
+        <span class="pill">ESG</span>
+      </div>
+    </section>
+
+    <section class="two" id="research">
+      <div>
+        <h2>Current projects</h2>
+        <ul>
+          <li>
+            <span class="pub-title">Chinese AI aid and local development</span>
+            <div class="small">City-level impacts, spillovers, and mechanisms using staggered adoption designs.</div>
+          </li>
+          <li>
+            <span class="pub-title">Water quality monitoring inequality</span>
+            <div class="small">Global measurement gaps and implications for environmental governance.</div>
+          </li>
+          <li>
+            <span class="pub-title">Climate and health</span>
+            <div class="small">Temperature exposure and healthcare utilization; infrastructure as adaptation.</div>
+          </li>
+        </ul>
+
+        <h2 style="margin-top:18px;">Selected papers / working papers</h2>
+        <ul>
+          <li>
+            <span class="pub-title">Moonlighting and workplace performance: Evidence from teledoctor in China</span>
+            <div class="small">Working paper.</div>
+          </li>
+          <li>
+            <span class="pub-title">[Add title]</span>
+            <div class="small">Journal / status.</div>
+          </li>
+        </ul>
+        <div class="small">Tip: keep this list short; link to a PDF or project page when ready.</div>
+      </div>
+
+      <div>
+        <h2>Teaching</h2>
+        <ul>
+          <li><span class="pub-title">Behavioral Economics</span> <span class="small">Undergraduate</span></li>
+          <li><span class="pub-title">Digital Health</span> <span class="small">Lecture / module</span></li>
+        </ul>
+
+        <h2 style="margin-top:18px;">Downloads</h2>
+        <ul>
+          <li><a href="files/cv.pdf">CV (PDF)</a> <span class="small">(upload to /files)</span></li>
+          <li><a href="#" title="Add a paper PDF link">Job market paper</a></li>
+        </ul>
+
+        <h2 style="margin-top:18px;">News</h2>
+        <div class="small">
+          Update this box occasionally (talks, grants, new papers).
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <div class="small">
+        Email is the best way to reach me.<br/>
+        Optional: add office address or a short note for prospective students.
+      </div>
+    </section>
+
+    <footer>
+      © <span id="y"></span> Yuhang Pan · Built with GitHub Pages
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
