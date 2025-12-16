@@ -4,16 +4,21 @@ title: "Yuhang Pan"
 
 ## About
 
-I am an economist working at the intersection of environmental economics, health, and development.
-My research studies how environmental risks and new technologies shape behavior, productivity, and inequality.
+Yuhang Pan is an applied microeconomist. He works as a tenure-track assistant professor at the Institute for Global Health and Development (iGHD) at Peking University (PKU). His research lies at the intersection of environmental economics, health economics, and development economics. His current research interests include (1) the effective design of environmental regulatory policies, (2) the health consequences of public policies, particularly environmental policies, and (3) physician incentives in healthcare systems. Some of his work also intersects with topics in artificial intelligence and behavioral economics.
+
+He has published in leading journals across disciplines, including Science, Nature Sustainability, and the Journal of Environmental Economics and Management (JEEM).
+
+Yuhang received his Ph.D. (Environmental Economics Track) from the Hong Kong University of Science and Technology (HKUST) and completed his postdoctoral training at the Faculty of Business and Economics at the University of Hong Kong. He holds a bachelor’s degree in environmental science from Beijing Normal University.
+
+At Peking University, he is also a faculty member at the Institute of Carbon Neutrality and the Yenching Academy. At PKU-iGHD, he serves as the executive director of the PKU-Yale Summer Camp on Health Economics and the postgraduate program coordinator.
 
 **Affiliation:** Peking University  
-**Email:** your_email@pku.edu.cn  
+**Email:** yhpan@pku.edu.cn  
 **Links:** [GitHub](https://github.com/yuhang-pan) · [Google Scholar](#) · [CV](files/cv.pdf)
 
 ---
 
-## Research Interests
+## Research Themes
 
 - Climate & health
 - Air and water quality
