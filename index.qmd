@@ -1,0 +1,28 @@
+---
+title: "Yuhang Pan"
+---
+
+## About
+
+I am an economist working at the intersection of environmental economics, health, and development.
+My research studies how environmental risks and new technologies shape behavior, productivity, and inequality.
+
+**Affiliation:** Peking University  
+**Email:** <your-email@domain.com>  
+**Links:** [GitHub](https://github.com/yuhang-pan) · [Google Scholar](#) · [CV](files/cv.pdf)
+
+---
+
+## Research Interests
+
+- Climate & health
+- Air and water quality
+- AI & development (e.g., Chinese AI aid)
+- ESG and firm behavior
+
+---
+
+## Latest
+
+- (2025-12) Launching my new academic homepage.
+- (Optional) Add talks, new working papers, releases.
