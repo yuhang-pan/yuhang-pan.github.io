@@ -18,8 +18,15 @@ website:
         text: Team
       - href: join-us.qmd
         text: Join Us
+    right:
+      - icon: github
+        href: https://github.com/yuhang-pan
+      - text: CV
+        href: files/cv.pdf
 
 format:
   html:
     theme: cosmo
-    toc: true
+    css: styles.css
+    toc: false
+    smooth-scroll: true
