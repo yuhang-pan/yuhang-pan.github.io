@@ -1,0 +1,5 @@
+/* Minimal academic tweaks */
+.navbar { font-size: 0.98rem; }
+h1, h2, h3 { letter-spacing: 0.2px; }
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
