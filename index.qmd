@@ -8,7 +8,7 @@ I am an economist working at the intersection of environmental economics, health
 My research studies how environmental risks and new technologies shape behavior, productivity, and inequality.
 
 **Affiliation:** Peking University  
-**Email:** <your-email@domain.com>  
+**Email:** your_email@pku.edu.cn  
 **Links:** [GitHub](https://github.com/yuhang-pan) · [Google Scholar](#) · [CV](files/cv.pdf)
 
 ---
@@ -18,11 +18,17 @@ My research studies how environmental risks and new technologies shape behavior,
 - Climate & health
 - Air and water quality
 - AI & development (e.g., Chinese AI aid)
-- ESG and firm behavior
+- ESG and corporate behavior
 
 ---
 
-## Latest
+## Selected Work
 
-- (2025-12) Launching my new academic homepage.
-- (Optional) Add talks, new working papers, releases.
+- **Moonlighting and Workplace Performance: Evidence from Teledoctor in China** (Working paper)  
+- **Chinese AI Aid and Local Development** (Work in progress)
+
+---
+
+## News
+
+- (2025) Launched my academic website.
