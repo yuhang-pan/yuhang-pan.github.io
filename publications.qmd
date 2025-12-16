@@ -1,0 +1,13 @@
+---
+title: "Publications"
+---
+
+## Publications
+
+### 2025
+- **Paper title** (with ...). *Journal name*.  
+  [Journal link](#) · [PDF](#)
+
+### 2024
+- **Paper title** (with ...). *Journal name*.  
+  [Link](#)
