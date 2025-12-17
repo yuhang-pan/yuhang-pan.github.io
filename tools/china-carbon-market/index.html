@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>China Carbon Market – Interactive Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Plotly -->
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      margin: 32px;
+      max-width: 1000px;
+    }
+    h1 {
+      margin-bottom: 0.2em;
+    }
+    p {
+      color: #444;
+    }
+    .panel {
+      border: 1px solid #ddd;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    input {
+      padding: 8px;
+      width: 180px;
+    }
+    button {
+      padding: 10px 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .output {
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    #plot {
+      height: 480px;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>China Carbon Market – Interactive Simulator</h1>
+<p>
+This tool illustrates compliance costs under a simplified emissions trading system (ETS).
+All calculations are for demonstration and teaching purposes only.
+</p>
+
+<div class="panel">
+  <h3>Input parameters</h3>
+
+  <div class="row">
+    <label for="price">Carbon price (RMB / ton CO₂)</label>
+    <input id="price" type="number" value="80" step="5">
+  </div>
+
+  <div class="row">
+    <label for="emissions">Firm emissions (tons CO₂)</label>
+    <input id="emissions" type="number" value="100000" step="1000">
+  </div>
+
+  <div class="row">
+    <label for="allowance">Free allowance (tons CO₂)</label>
+    <input id="allowance" type="number" value="80000" step="1000">
+  </div>
+
+  <button onclick="run()">Calculate & Plot</button>
+
+  <div class="output" id="results"></div>
+</div>
+
+<div class="panel">
+  <h3>Compliance cost vs carbon price</h3>
+  <div id="plot"></div>
+</div>
+
+<footer>
+  © Yuhang Pan · Interactive tool hosted on GitHub Pages
+</footer>
+
+<script>
+function run() {
+  const price = Number(document.getElementById("price").value);
+  const emissions = Number(document.getElementById("emissions").value);
+  const allowance = Number(document.getElementById("allowance").value);
+
+  const netEmissions = Math.max(emissions - allowance, 0);
+  const cost = netEmissions * price;
+
+  document.getElementById("results").innerHTML =
+    `Net emissions: ${netEmissions.toLocaleString()} tons CO₂<br>
+     Compliance cost: RMB ${cost.toLocaleString()}`;
+
+  // Price grid for plotting
+  const priceGrid = [];
+  const costGrid = [];
+
+  for (let p = 0; p <= price * 2; p += price / 20) {
+    priceGrid.push(p);
+    costGrid.push(netEmissions * p);
+  }
+
+  Plotly.newPlot("plot", [{
+    x: priceGrid,
+    y: costGrid,
+    type: "scatter",
+    mode: "lines",
+    line: { width: 3 },
+    name: "Compliance cost"
+  }], {
+    margin: { t: 30 },
+    xaxis: { title: "Carbon price (RMB / ton CO₂)" },
+    yaxis: { title: "Compliance cost (RMB)" }
+  });
+}
+
+// Initial render
+run();
+</script>
+
+</body>
+</html>
