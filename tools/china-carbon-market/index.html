@@ -2,48 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>China Carbon Market – Province MACC Curve Generator</title>
+  <title>China Carbon Market – Province MACC Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 
   <style>
-    body {
+    body{
       font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
       margin: 28px;
       max-width: 1200px;
       line-height: 1.35;
     }
-    h1 { margin: 0 0 6px 0; }
-    p { color: #444; margin-top: 6px; }
-    .panel {
+    h1{ margin: 0 0 6px 0; }
+    p{ color:#444; margin: 6px 0 0 0; }
+    .panel{
       border: 1px solid #ddd;
       border-radius: 10px;
       padding: 16px;
       margin: 18px 0 22px 0;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 14px 18px;
-      align-items: center;
+    .grid{
+      display:grid;
+      grid-template-columns: 280px 1fr;
+      gap: 12px 18px;
+      align-items:center;
     }
-    .row { display: contents; }
-    label { color: #222; }
-    input, select {
+    label{ color:#222; }
+    input, select{
       padding: 9px 10px;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 14px;
-      width: 220px;
+      width: 260px;
+      max-width: 100%;
     }
-    .actions {
-      display: flex;
-      gap: 10px;
+    .actions{
+      display:flex;
+      gap:10px;
       flex-wrap: wrap;
       margin-top: 14px;
     }
-    button {
+    button{
       padding: 10px 14px;
       border: 1px solid #bbb;
       border-radius: 10px;
@@ -51,138 +51,106 @@
       background: white;
       font-size: 14px;
     }
-    button.primary {
-      border-color: #111;
-      font-weight: 600;
+    button.primary{
+      border-color:#111;
+      font-weight:600;
     }
-    .note { color: #666; font-size: 13px; margin-top: 10px; }
-    .cards {
-      display: grid;
+    .note{ color:#666; font-size: 13px; margin-top: 10px; }
+    .cards{
+      display:grid;
       grid-template-columns: 1fr;
       gap: 16px;
+      margin-top: 12px;
     }
-    .card {
+    .card{
       border: 1px solid #ddd;
       border-radius: 10px;
       padding: 14px;
     }
-    .card h3 {
+    .card h3{
       margin: 0 0 6px 0;
-      display: flex;
-      align-items: baseline;
+      display:flex;
       justify-content: space-between;
       gap: 10px;
+      align-items: baseline;
     }
-    .meta {
-      color: #555;
+    .meta{
+      color:#555;
       font-size: 13px;
       margin-bottom: 10px;
     }
-    .plot {
-      width: 100%;
+    .plot{
+      width:100%;
       height: 430px;
     }
-    footer {
+    footer{
       margin-top: 26px;
-      color: #666;
+      color:#666;
       font-size: 13px;
     }
-    .small {
-      color:#777;
-      font-size: 12.5px;
-    }
+    .small{ color:#777; font-size: 12.5px; }
   </style>
 </head>
 
 <body>
 
-<h1>Province-level MACC Curve Generator (China)</h1>
+<h1>Province-level MACC Generator (China)</h1>
 <p>
-Generate one marginal abatement cost curve (MACC) figure per province (excluding Tibet).
-Anyone can input three parameters: <b>intercept</b>, <b>slope</b>, and <b>sigma</b> (standard error of estimate).
+One-click generation of marginal abatement cost curves (MACC) for all provinces (excluding Tibet).
+Users can modify parameters for any selected province.
 </p>
 
 <div class="panel">
-  <h2 style="margin:0 0 10px 0;">Inputs</h2>
+  <h2 style="margin:0 0 10px 0;">Controls</h2>
 
   <div class="grid">
-    <div class="row">
-      <label for="province">Province (excluding Tibet)</label>
-      <select id="province"></select>
-    </div>
+    <label for="province">Province (to edit / update)</label>
+    <select id="province"></select>
 
-    <div class="row">
-      <label for="intercept">Intercept (cost at zero abatement)</label>
-      <input id="intercept" type="number" value="0" step="0.1" />
-    </div>
+    <label for="intercept">Intercept</label>
+    <input id="intercept" type="number" value="0" step="0.1" />
 
-    <div class="row">
-      <label for="slope">Slope (cost change per unit abatement)</label>
-      <input id="slope" type="number" value="1" step="0.1" />
-    </div>
+    <label for="slope">Slope</label>
+    <input id="slope" type="number" value="1" step="0.1" />
 
-    <div class="row">
-      <label for="sigma">Sigma (standard error of estimate)</label>
-      <input id="sigma" type="number" value="5" step="0.1" min="0" />
-    </div>
+    <label for="sigma">Sigma (stored, not plotted)</label>
+    <input id="sigma" type="number" value="5" step="0.1" min="0" />
 
-    <div class="row">
-      <label for="amax">Max abatement on x-axis</label>
-      <input id="amax" type="number" value="100" step="1" min="1" />
-    </div>
+    <label for="amax">Max abatement on x-axis</label>
+    <input id="amax" type="number" value="100" step="1" min="1" />
 
-    <div class="row">
-      <label for="npts">Number of points</label>
-      <input id="npts" type="number" value="101" step="1" min="20" max="2001" />
-    </div>
+    <label for="npts">Number of points</label>
+    <input id="npts" type="number" value="101" step="1" min="20" max="2001" />
 
-    <div class="row">
-      <label for="ci">Uncertainty band</label>
-      <select id="ci">
-        <option value="95" selected>95% band (±1.96·sigma)</option>
-        <option value="68">68% band (±1·sigma)</option>
-        <option value="none">No band</option>
-      </select>
-    </div>
+    <label for="xlabel">X-axis label</label>
+    <input id="xlabel" type="text" value="Abatement (units)" />
 
-    <div class="row">
-      <label for="xlabel">X-axis label</label>
-      <input id="xlabel" type="text" value="Abatement (units)" />
-    </div>
-
-    <div class="row">
-      <label for="ylabel">Y-axis label</label>
-      <input id="ylabel" type="text" value="Marginal abatement cost (currency / unit)" />
-    </div>
+    <label for="ylabel">Y-axis label</label>
+    <input id="ylabel" type="text" value="Marginal abatement cost (currency / unit)" />
   </div>
 
   <div class="actions">
-    <button class="primary" id="addBtn">Add / Update Figure</button>
-    <button id="previewBtn">Preview (single chart)</button>
+    <button class="primary" id="genAllBtn">Generate ALL provinces (defaults)</button>
+    <button class="primary" id="updateOneBtn">Update selected province</button>
+    <button id="resetOneBtn">Reset selected province to default</button>
     <button id="clearBtn">Clear all figures</button>
   </div>
 
   <div class="note">
-    Model used: <span class="small"><b>MAC(x) = intercept + slope · x</b></span>.
-    The band uses the provided <b>sigma</b> as an estimate-level uncertainty around the line.
+    Model: <span class="small"><b>MAC(x) = intercept + slope · x</b></span>.
+    <b>Sigma is recorded but not displayed on the plot</b>.
   </div>
-</div>
-
-<div class="panel">
-  <h2 style="margin:0 0 10px 0;">Preview</h2>
-  <div id="previewPlot" class="plot"></div>
-  <div class="small">Use “Add / Update Figure” to store the plot as that province’s figure below.</div>
 </div>
 
 <h2>Province figures</h2>
 <div id="cards" class="cards"></div>
 
 <footer>
-  © Yuhang Pan · Hosted on GitHub Pages · Built with Plotly.js
+  © Yuhang Pan · Hosted on GitHub Pages · Plotly.js
 </footer>
 
 <script>
-  // Province list (excluding Tibet)
+  // Provinces (excluding Tibet)
   const PROVINCES = [
     "Beijing", "Tianjin", "Hebei", "Shanxi", "Inner Mongolia",
     "Liaoning", "Jilin", "Heilongjiang",
@@ -192,15 +160,28 @@ Anyone can input three parameters: <b>intercept</b>, <b>slope</b>, and <b>sigma<
     "Shaanxi", "Gansu", "Qinghai", "Ningxia", "Xinjiang"
   ];
 
-  // State: store parameters by province
+  // Default parameter template
+  function defaultParams() {
+    return {
+      intercept: 0,
+      slope: 1,
+      sigma: 5,      // stored only
+      amax: 100,
+      npts: 101,
+      xlabel: "Abatement (units)",
+      ylabel: "Marginal abatement cost (currency / unit)"
+    };
+  }
+
+  // Store params per province
   const store = new Map();
 
-  function $(id) { return document.getElementById(id); }
+  function $(id){ return document.getElementById(id); }
 
-  function populateProvinces() {
+  function populateProvinces(){
     const sel = $("province");
     sel.innerHTML = "";
-    for (const p of PROVINCES) {
+    for (const p of PROVINCES){
       const opt = document.createElement("option");
       opt.value = p;
       opt.textContent = p;
@@ -208,7 +189,7 @@ Anyone can input three parameters: <b>intercept</b>, <b>slope</b>, and <b>sigma<
     }
   }
 
-  function linspace(start, end, n) {
+  function linspace(start, end, n){
     const arr = [];
     if (n <= 1) return [start];
     const step = (end - start) / (n - 1);
@@ -216,154 +197,148 @@ Anyone can input three parameters: <b>intercept</b>, <b>slope</b>, and <b>sigma<
     return arr;
   }
 
-  function computeSeries(params) {
-    const {
-      intercept, slope, sigma, amax, npts, ciMode
-    } = params;
-
-    const x = linspace(0, amax, npts);
-    const y = x.map(v => intercept + slope * v);
-
-    let k = null;
-    if (ciMode === "95") k = 1.96;
-    if (ciMode === "68") k = 1.0;
-
-    let yUpper = null, yLower = null;
-    if (k !== null) {
-      yUpper = y.map(v => v + k * sigma);
-      yLower = y.map(v => v - k * sigma);
-    }
-
-    return { x, y, yUpper, yLower };
+  function computeSeries(params){
+    const x = linspace(0, params.amax, params.npts);
+    const y = x.map(v => params.intercept + params.slope * v);
+    return { x, y };
   }
 
-  function plotInto(divId, title, params) {
-    const { x, y, yUpper, yLower } = computeSeries(params);
+  function plotProvince(divId, province, params){
+    const { x, y } = computeSeries(params);
 
-    const traces = [];
-
-    if (yUpper && yLower) {
-      // CI band using "fill" between lower and upper
-      traces.push({
-        x, y: yLower,
-        type: "scatter",
-        mode: "lines",
-        line: { width: 0 },
-        hoverinfo: "skip",
-        showlegend: false,
-        name: "Lower"
-      });
-      traces.push({
-        x, y: yUpper,
-        type: "scatter",
-        mode: "lines",
-        fill: "tonexty",
-        line: { width: 0 },
-        hoverinfo: "skip",
-        showlegend: true,
-        name: params.ciMode === "95" ? "95% band" : "68% band"
-      });
-    }
-
-    traces.push({
+    const trace = {
       x, y,
       type: "scatter",
       mode: "lines",
       line: { width: 3 },
       name: "MACC"
-    });
+    };
 
     const layout = {
-      title: { text: title, x: 0.02 },
+      title: { text: `${province}: Marginal Abatement Cost Curve (MACC)`, x: 0.02 },
       margin: { t: 50, r: 20, b: 55, l: 70 },
       xaxis: { title: params.xlabel },
       yaxis: { title: params.ylabel },
       legend: { orientation: "h", x: 0.02, y: 1.12 }
     };
 
-    Plotly.newPlot(divId, traces, layout, {responsive: true});
+    Plotly.newPlot(divId, [trace], layout, {responsive: true});
   }
 
-  function readInputs() {
-    const intercept = Number($("intercept").value);
-    const slope = Number($("slope").value);
-    const sigma = Number($("sigma").value);
-    const amax = Number($("amax").value);
-    const npts = Number($("npts").value);
-    const ciMode = $("ci").value;
-    const xlabel = $("xlabel").value || "Abatement (units)";
-    const ylabel = $("ylabel").value || "Marginal abatement cost";
-    return { intercept, slope, sigma, amax, npts, ciMode, xlabel, ylabel };
-  }
+  function ensureCard(province){
+    const id = `card-${province.replace(/\s+/g, "-").toLowerCase()}`;
+    let card = document.getElementById(id);
 
-  function renderPreview() {
-    const p = $("province").value;
-    const params = readInputs();
-    const title = `${p}: Marginal Abatement Cost Curve (MACC)`;
-    plotInto("previewPlot", title, params);
-  }
-
-  function upsertCard() {
-    const p = $("province").value;
-    const params = readInputs();
-
-    store.set(p, params);
-
-    // Create or update card element
-    const cardId = `card-${p.replace(/\s+/g, "-").toLowerCase()}`;
-    let card = document.getElementById(cardId);
-
-    if (!card) {
+    if (!card){
       card = document.createElement("div");
       card.className = "card";
-      card.id = cardId;
+      card.id = id;
 
-      const header = document.createElement("h3");
-      header.innerHTML = `<span>${p}</span><span class="small">Figure</span>`;
-      card.appendChild(header);
+      const h = document.createElement("h3");
+      h.innerHTML = `<span>${province}</span><span class="small">Figure</span>`;
+      card.appendChild(h);
 
       const meta = document.createElement("div");
       meta.className = "meta";
-      meta.id = `${cardId}-meta`;
+      meta.id = `${id}-meta`;
       card.appendChild(meta);
 
       const plot = document.createElement("div");
       plot.className = "plot";
-      plot.id = `${cardId}-plot`;
+      plot.id = `${id}-plot`;
       card.appendChild(plot);
 
       $("cards").appendChild(card);
     }
 
-    // Update meta text
-    const metaText =
-      `Intercept = ${params.intercept}, Slope = ${params.slope}, Sigma = ${params.sigma} · ` +
-      `X max = ${params.amax}, Points = ${params.npts} · Band = ${params.ciMode === "none" ? "None" : params.ciMode}`;
-    document.getElementById(`${cardId}-meta`).textContent = metaText;
-
-    // Plot into card
-    const title = `${p}: Marginal Abatement Cost Curve (MACC)`;
-    plotInto(`${cardId}-plot`, title, params);
-
-    // Keep preview in sync too
-    renderPreview();
+    return { cardId: id, plotId: `${id}-plot`, metaId: `${id}-meta` };
   }
 
-  function clearAll() {
+  function writeMeta(metaId, params){
+    // sigma is shown here for record-keeping (but not plotted)
+    document.getElementById(metaId).textContent =
+      `Intercept=${params.intercept}, Slope=${params.slope}, Sigma=${params.sigma} · ` +
+      `X max=${params.amax}, Points=${params.npts}`;
+  }
+
+  function readInputs(){
+    return {
+      intercept: Number($("intercept").value),
+      slope: Number($("slope").value),
+      sigma: Number($("sigma").value),
+      amax: Number($("amax").value),
+      npts: Number($("npts").value),
+      xlabel: $("xlabel").value || "Abatement (units)",
+      ylabel: $("ylabel").value || "Marginal abatement cost (currency / unit)"
+    };
+  }
+
+  function loadInputsFromProvince(province){
+    const params = store.get(province) || defaultParams();
+    $("intercept").value = params.intercept;
+    $("slope").value = params.slope;
+    $("sigma").value = params.sigma;
+    $("amax").value = params.amax;
+    $("npts").value = params.npts;
+    $("xlabel").value = params.xlabel;
+    $("ylabel").value = params.ylabel;
+  }
+
+  function updateSelectedProvince(){
+    const p = $("province").value;
+    const params = readInputs();
+    store.set(p, params);
+
+    const { plotId, metaId } = ensureCard(p);
+    writeMeta(metaId, params);
+    plotProvince(plotId, p, params);
+  }
+
+  function resetSelectedProvince(){
+    const p = $("province").value;
+    const params = defaultParams();
+    store.set(p, params);
+    loadInputsFromProvince(p);
+
+    const { plotId, metaId } = ensureCard(p);
+    writeMeta(metaId, params);
+    plotProvince(plotId, p, params);
+  }
+
+  function generateAllDefaults(){
+    // Fill store with defaults, then render all
+    for (const p of PROVINCES){
+      if (!store.has(p)) store.set(p, defaultParams());
+      const params = store.get(p);
+
+      const { plotId, metaId } = ensureCard(p);
+      writeMeta(metaId, params);
+      plotProvince(plotId, p, params);
+    }
+  }
+
+  function clearAll(){
     store.clear();
     $("cards").innerHTML = "";
   }
 
   // Init
   populateProvinces();
-  renderPreview();
 
-  $("previewBtn").addEventListener("click", renderPreview);
-  $("addBtn").addEventListener("click", upsertCard);
+  // Initialize store with defaults (but do not render until user clicks Generate All)
+  for (const p of PROVINCES) store.set(p, defaultParams());
+
+  // Load inputs for the first province
+  loadInputsFromProvince($("province").value);
+
+  $("province").addEventListener("change", () => {
+    loadInputsFromProvince($("province").value);
+  });
+
+  $("genAllBtn").addEventListener("click", generateAllDefaults);
+  $("updateOneBtn").addEventListener("click", updateSelectedProvince);
+  $("resetOneBtn").addEventListener("click", resetSelectedProvince);
   $("clearBtn").addEventListener("click", clearAll);
-
-  // Auto-preview when province changes
-  $("province").addEventListener("change", renderPreview);
 </script>
 
 </body>
