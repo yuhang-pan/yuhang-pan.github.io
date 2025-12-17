@@ -2,139 +2,368 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>China Carbon Market – Interactive Tool</title>
+  <title>China Carbon Market – Province MACC Curve Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Plotly -->
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 
   <style>
     body {
       font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-      margin: 32px;
-      max-width: 1000px;
+      margin: 28px;
+      max-width: 1200px;
+      line-height: 1.35;
     }
-    h1 {
-      margin-bottom: 0.2em;
-    }
-    p {
-      color: #444;
-    }
+    h1 { margin: 0 0 6px 0; }
+    p { color: #444; margin-top: 6px; }
     .panel {
       border: 1px solid #ddd;
+      border-radius: 10px;
       padding: 16px;
-      border-radius: 8px;
-      margin-bottom: 24px;
+      margin: 18px 0 22px 0;
     }
-    .row {
+    .grid {
       display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 12px;
+      grid-template-columns: 260px 1fr;
+      gap: 14px 18px;
       align-items: center;
-      margin-bottom: 12px;
     }
-    input {
-      padding: 8px;
-      width: 180px;
+    .row { display: contents; }
+    label { color: #222; }
+    input, select {
+      padding: 9px 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      width: 220px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
     }
     button {
-      padding: 10px 16px;
-      font-size: 14px;
+      padding: 10px 14px;
+      border: 1px solid #bbb;
+      border-radius: 10px;
       cursor: pointer;
+      background: white;
+      font-size: 14px;
     }
-    .output {
+    button.primary {
+      border-color: #111;
       font-weight: 600;
-      margin-top: 8px;
     }
-    #plot {
-      height: 480px;
+    .note { color: #666; font-size: 13px; margin-top: 10px; }
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .card h3 {
+      margin: 0 0 6px 0;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .meta {
+      color: #555;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    .plot {
+      width: 100%;
+      height: 430px;
     }
     footer {
-      margin-top: 40px;
-      font-size: 13px;
+      margin-top: 26px;
       color: #666;
+      font-size: 13px;
+    }
+    .small {
+      color:#777;
+      font-size: 12.5px;
     }
   </style>
 </head>
 
 <body>
 
-<h1>China Carbon Market – Interactive Simulator</h1>
+<h1>Province-level MACC Curve Generator (China)</h1>
 <p>
-This tool illustrates compliance costs under a simplified emissions trading system (ETS).
-All calculations are for demonstration and teaching purposes only.
+Generate one marginal abatement cost curve (MACC) figure per province (excluding Tibet).
+Anyone can input three parameters: <b>intercept</b>, <b>slope</b>, and <b>sigma</b> (standard error of estimate).
 </p>
 
 <div class="panel">
-  <h3>Input parameters</h3>
+  <h2 style="margin:0 0 10px 0;">Inputs</h2>
 
-  <div class="row">
-    <label for="price">Carbon price (RMB / ton CO₂)</label>
-    <input id="price" type="number" value="80" step="5">
+  <div class="grid">
+    <div class="row">
+      <label for="province">Province (excluding Tibet)</label>
+      <select id="province"></select>
+    </div>
+
+    <div class="row">
+      <label for="intercept">Intercept (cost at zero abatement)</label>
+      <input id="intercept" type="number" value="0" step="0.1" />
+    </div>
+
+    <div class="row">
+      <label for="slope">Slope (cost change per unit abatement)</label>
+      <input id="slope" type="number" value="1" step="0.1" />
+    </div>
+
+    <div class="row">
+      <label for="sigma">Sigma (standard error of estimate)</label>
+      <input id="sigma" type="number" value="5" step="0.1" min="0" />
+    </div>
+
+    <div class="row">
+      <label for="amax">Max abatement on x-axis</label>
+      <input id="amax" type="number" value="100" step="1" min="1" />
+    </div>
+
+    <div class="row">
+      <label for="npts">Number of points</label>
+      <input id="npts" type="number" value="101" step="1" min="20" max="2001" />
+    </div>
+
+    <div class="row">
+      <label for="ci">Uncertainty band</label>
+      <select id="ci">
+        <option value="95" selected>95% band (±1.96·sigma)</option>
+        <option value="68">68% band (±1·sigma)</option>
+        <option value="none">No band</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <label for="xlabel">X-axis label</label>
+      <input id="xlabel" type="text" value="Abatement (units)" />
+    </div>
+
+    <div class="row">
+      <label for="ylabel">Y-axis label</label>
+      <input id="ylabel" type="text" value="Marginal abatement cost (currency / unit)" />
+    </div>
   </div>
 
-  <div class="row">
-    <label for="emissions">Firm emissions (tons CO₂)</label>
-    <input id="emissions" type="number" value="100000" step="1000">
+  <div class="actions">
+    <button class="primary" id="addBtn">Add / Update Figure</button>
+    <button id="previewBtn">Preview (single chart)</button>
+    <button id="clearBtn">Clear all figures</button>
   </div>
 
-  <div class="row">
-    <label for="allowance">Free allowance (tons CO₂)</label>
-    <input id="allowance" type="number" value="80000" step="1000">
+  <div class="note">
+    Model used: <span class="small"><b>MAC(x) = intercept + slope · x</b></span>.
+    The band uses the provided <b>sigma</b> as an estimate-level uncertainty around the line.
   </div>
-
-  <button onclick="run()">Calculate & Plot</button>
-
-  <div class="output" id="results"></div>
 </div>
 
 <div class="panel">
-  <h3>Compliance cost vs carbon price</h3>
-  <div id="plot"></div>
+  <h2 style="margin:0 0 10px 0;">Preview</h2>
+  <div id="previewPlot" class="plot"></div>
+  <div class="small">Use “Add / Update Figure” to store the plot as that province’s figure below.</div>
 </div>
 
+<h2>Province figures</h2>
+<div id="cards" class="cards"></div>
+
 <footer>
-  © Yuhang Pan · Interactive tool hosted on GitHub Pages
+  © Yuhang Pan · Hosted on GitHub Pages · Built with Plotly.js
 </footer>
 
 <script>
-function run() {
-  const price = Number(document.getElementById("price").value);
-  const emissions = Number(document.getElementById("emissions").value);
-  const allowance = Number(document.getElementById("allowance").value);
+  // Province list (excluding Tibet)
+  const PROVINCES = [
+    "Beijing", "Tianjin", "Hebei", "Shanxi", "Inner Mongolia",
+    "Liaoning", "Jilin", "Heilongjiang",
+    "Shanghai", "Jiangsu", "Zhejiang", "Anhui", "Fujian", "Jiangxi", "Shandong",
+    "Henan", "Hubei", "Hunan", "Guangdong", "Guangxi", "Hainan",
+    "Chongqing", "Sichuan", "Guizhou", "Yunnan",
+    "Shaanxi", "Gansu", "Qinghai", "Ningxia", "Xinjiang"
+  ];
 
-  const netEmissions = Math.max(emissions - allowance, 0);
-  const cost = netEmissions * price;
+  // State: store parameters by province
+  const store = new Map();
 
-  document.getElementById("results").innerHTML =
-    `Net emissions: ${netEmissions.toLocaleString()} tons CO₂<br>
-     Compliance cost: RMB ${cost.toLocaleString()}`;
+  function $(id) { return document.getElementById(id); }
 
-  // Price grid for plotting
-  const priceGrid = [];
-  const costGrid = [];
-
-  for (let p = 0; p <= price * 2; p += price / 20) {
-    priceGrid.push(p);
-    costGrid.push(netEmissions * p);
+  function populateProvinces() {
+    const sel = $("province");
+    sel.innerHTML = "";
+    for (const p of PROVINCES) {
+      const opt = document.createElement("option");
+      opt.value = p;
+      opt.textContent = p;
+      sel.appendChild(opt);
+    }
   }
 
-  Plotly.newPlot("plot", [{
-    x: priceGrid,
-    y: costGrid,
-    type: "scatter",
-    mode: "lines",
-    line: { width: 3 },
-    name: "Compliance cost"
-  }], {
-    margin: { t: 30 },
-    xaxis: { title: "Carbon price (RMB / ton CO₂)" },
-    yaxis: { title: "Compliance cost (RMB)" }
-  });
-}
+  function linspace(start, end, n) {
+    const arr = [];
+    if (n <= 1) return [start];
+    const step = (end - start) / (n - 1);
+    for (let i = 0; i < n; i++) arr.push(start + i * step);
+    return arr;
+  }
 
-// Initial render
-run();
+  function computeSeries(params) {
+    const {
+      intercept, slope, sigma, amax, npts, ciMode
+    } = params;
+
+    const x = linspace(0, amax, npts);
+    const y = x.map(v => intercept + slope * v);
+
+    let k = null;
+    if (ciMode === "95") k = 1.96;
+    if (ciMode === "68") k = 1.0;
+
+    let yUpper = null, yLower = null;
+    if (k !== null) {
+      yUpper = y.map(v => v + k * sigma);
+      yLower = y.map(v => v - k * sigma);
+    }
+
+    return { x, y, yUpper, yLower };
+  }
+
+  function plotInto(divId, title, params) {
+    const { x, y, yUpper, yLower } = computeSeries(params);
+
+    const traces = [];
+
+    if (yUpper && yLower) {
+      // CI band using "fill" between lower and upper
+      traces.push({
+        x, y: yLower,
+        type: "scatter",
+        mode: "lines",
+        line: { width: 0 },
+        hoverinfo: "skip",
+        showlegend: false,
+        name: "Lower"
+      });
+      traces.push({
+        x, y: yUpper,
+        type: "scatter",
+        mode: "lines",
+        fill: "tonexty",
+        line: { width: 0 },
+        hoverinfo: "skip",
+        showlegend: true,
+        name: params.ciMode === "95" ? "95% band" : "68% band"
+      });
+    }
+
+    traces.push({
+      x, y,
+      type: "scatter",
+      mode: "lines",
+      line: { width: 3 },
+      name: "MACC"
+    });
+
+    const layout = {
+      title: { text: title, x: 0.02 },
+      margin: { t: 50, r: 20, b: 55, l: 70 },
+      xaxis: { title: params.xlabel },
+      yaxis: { title: params.ylabel },
+      legend: { orientation: "h", x: 0.02, y: 1.12 }
+    };
+
+    Plotly.newPlot(divId, traces, layout, {responsive: true});
+  }
+
+  function readInputs() {
+    const intercept = Number($("intercept").value);
+    const slope = Number($("slope").value);
+    const sigma = Number($("sigma").value);
+    const amax = Number($("amax").value);
+    const npts = Number($("npts").value);
+    const ciMode = $("ci").value;
+    const xlabel = $("xlabel").value || "Abatement (units)";
+    const ylabel = $("ylabel").value || "Marginal abatement cost";
+    return { intercept, slope, sigma, amax, npts, ciMode, xlabel, ylabel };
+  }
+
+  function renderPreview() {
+    const p = $("province").value;
+    const params = readInputs();
+    const title = `${p}: Marginal Abatement Cost Curve (MACC)`;
+    plotInto("previewPlot", title, params);
+  }
+
+  function upsertCard() {
+    const p = $("province").value;
+    const params = readInputs();
+
+    store.set(p, params);
+
+    // Create or update card element
+    const cardId = `card-${p.replace(/\s+/g, "-").toLowerCase()}`;
+    let card = document.getElementById(cardId);
+
+    if (!card) {
+      card = document.createElement("div");
+      card.className = "card";
+      card.id = cardId;
+
+      const header = document.createElement("h3");
+      header.innerHTML = `<span>${p}</span><span class="small">Figure</span>`;
+      card.appendChild(header);
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      meta.id = `${cardId}-meta`;
+      card.appendChild(meta);
+
+      const plot = document.createElement("div");
+      plot.className = "plot";
+      plot.id = `${cardId}-plot`;
+      card.appendChild(plot);
+
+      $("cards").appendChild(card);
+    }
+
+    // Update meta text
+    const metaText =
+      `Intercept = ${params.intercept}, Slope = ${params.slope}, Sigma = ${params.sigma} · ` +
+      `X max = ${params.amax}, Points = ${params.npts} · Band = ${params.ciMode === "none" ? "None" : params.ciMode}`;
+    document.getElementById(`${cardId}-meta`).textContent = metaText;
+
+    // Plot into card
+    const title = `${p}: Marginal Abatement Cost Curve (MACC)`;
+    plotInto(`${cardId}-plot`, title, params);
+
+    // Keep preview in sync too
+    renderPreview();
+  }
+
+  function clearAll() {
+    store.clear();
+    $("cards").innerHTML = "";
+  }
+
+  // Init
+  populateProvinces();
+  renderPreview();
+
+  $("previewBtn").addEventListener("click", renderPreview);
+  $("addBtn").addEventListener("click", upsertCard);
+  $("clearBtn").addEventListener("click", clearAll);
+
+  // Auto-preview when province changes
+  $("province").addEventListener("change", renderPreview);
 </script>
 
 </body>
