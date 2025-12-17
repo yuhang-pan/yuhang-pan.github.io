@@ -30,3 +30,6 @@ format:
     css: styles.css
     toc: false
     smooth-scroll: true
+    
+resources:
+  - tools/
