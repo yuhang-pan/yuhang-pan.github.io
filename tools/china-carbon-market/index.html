@@ -2,343 +2,402 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>China Carbon Market – Province MACC Generator</title>
+  <title>China Carbon Market – Province MACC Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 
   <style>
+    :root { --border:#ddd; --muted:#666; }
     body{
       font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-      margin: 28px;
-      max-width: 1200px;
+      margin: 24px;
+      max-width: 1400px;
       line-height: 1.35;
     }
     h1{ margin: 0 0 6px 0; }
-    p{ color:#444; margin: 6px 0 0 0; }
+    p{ margin: 6px 0 0 0; color:#444; }
     .panel{
-      border: 1px solid #ddd;
-      border-radius: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
       padding: 16px;
-      margin: 18px 0 22px 0;
+      margin: 16px 0 18px 0;
     }
-    .grid{
-      display:grid;
-      grid-template-columns: 280px 1fr;
-      gap: 12px 18px;
-      align-items:center;
+    .controls{
+      display: grid;
+      grid-template-columns: 220px 1fr 220px 1fr;
+      gap: 10px 14px;
+      align-items: center;
     }
-    label{ color:#222; }
-    input, select{
-      padding: 9px 10px;
+    .controls label{ color:#222; }
+    .controls input, .controls select, button{
+      padding: 8px 10px;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 14px;
-      width: 260px;
-      max-width: 100%;
-    }
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
+      max-width: 260px;
     }
     button{
-      padding: 10px 14px;
-      border: 1px solid #bbb;
-      border-radius: 10px;
       cursor: pointer;
       background: white;
-      font-size: 14px;
+      border-color: #bbb;
+      max-width: none;
+      width: fit-content;
     }
     button.primary{
       border-color:#111;
-      font-weight:600;
+      font-weight: 650;
     }
-    .note{ color:#666; font-size: 13px; margin-top: 10px; }
-    .cards{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-      margin-top: 12px;
+    .note{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
     }
-    .card{
-      border: 1px solid #ddd;
+
+    /* Table */
+    .table-wrap{
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+      background: white;
+    }
+    thead th{
+      position: sticky;
+      top: 0;
+      background: #fafafa;
+      z-index: 1;
+    }
+    th, td{
+      border-bottom: 1px solid var(--border);
+      padding: 10px 10px;
+      text-align: left;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+    th small{ color: var(--muted); font-weight: 500; }
+    tbody tr:hover{ background: #fcfcfc; }
+    .num{
+      width: 140px;
+    }
+    .num input{
+      width: 120px;
+      padding: 6px 8px;
+      border: 1px solid #ccc;
       border-radius: 10px;
-      padding: 14px;
+      font-size: 13px;
     }
-    .card h3{
-      margin: 0 0 6px 0;
+
+    /* Plots grid (3–5 columns) */
+    .plots{
+      display: grid;
+      gap: 14px;
+    }
+    .plot-card{
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      background: white;
+    }
+    .plot-title{
       display:flex;
       justify-content: space-between;
       gap: 10px;
       align-items: baseline;
+      margin: 0 0 6px 0;
+      font-size: 14px;
+      font-weight: 700;
     }
-    .meta{
-      color:#555;
-      font-size: 13px;
-      margin-bottom: 10px;
+    .plot-meta{
+      color: var(--muted);
+      font-size: 12.5px;
+      margin-bottom: 6px;
     }
     .plot{
-      width:100%;
-      height: 430px;
+      height: 250px;
+      width: 100%;
     }
+
     footer{
-      margin-top: 26px;
-      color:#666;
+      margin-top: 18px;
+      color: var(--muted);
       font-size: 13px;
     }
-    .small{ color:#777; font-size: 12.5px; }
+
+    @media (max-width: 980px){
+      .controls{ grid-template-columns: 1fr 1fr; }
+      .controls input, .controls select{ max-width: none; width: 100%; }
+    }
   </style>
 </head>
 
 <body>
+  <h1>Province MACC Dashboard (China)</h1>
+  <p>
+    Edit parameters for each province (excluding Tibet) in the table. The plots below update automatically.
+    <b>Sigma</b> is stored for reference but is <b>not plotted</b>.
+  </p>
 
-<h1>Province-level MACC Generator (China)</h1>
-<p>
-One-click generation of marginal abatement cost curves (MACC) for all provinces (excluding Tibet).
-Users can modify parameters for any selected province.
-</p>
+  <div class="panel">
+    <h2 style="margin:0 0 10px 0;">Global settings</h2>
 
-<div class="panel">
-  <h2 style="margin:0 0 10px 0;">Controls</h2>
+    <div class="controls">
+      <label for="amax">Max abatement on x-axis</label>
+      <input id="amax" type="number" value="100" step="1" min="1"/>
 
-  <div class="grid">
-    <label for="province">Province (to edit / update)</label>
-    <select id="province"></select>
+      <label for="npts">Number of points</label>
+      <input id="npts" type="number" value="80" step="1" min="20" max="2001"/>
 
-    <label for="intercept">Intercept</label>
-    <input id="intercept" type="number" value="0" step="0.1" />
+      <label for="cols">Plots per row</label>
+      <select id="cols">
+        <option value="3">3</option>
+        <option value="4" selected>4</option>
+        <option value="5">5</option>
+      </select>
 
-    <label for="slope">Slope</label>
-    <input id="slope" type="number" value="1" step="0.1" />
+      <label for="sameY">Y-axis range</label>
+      <select id="sameY">
+        <option value="auto" selected>Auto (each province)</option>
+        <option value="common">Common (all provinces)</option>
+      </select>
+    </div>
 
-    <label for="sigma">Sigma (stored, not plotted)</label>
-    <input id="sigma" type="number" value="5" step="0.1" min="0" />
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+      <button class="primary" id="renderAll">Render / Refresh all plots</button>
+      <button id="resetDefaults">Reset all to defaults</button>
+    </div>
 
-    <label for="amax">Max abatement on x-axis</label>
-    <input id="amax" type="number" value="100" step="1" min="1" />
-
-    <label for="npts">Number of points</label>
-    <input id="npts" type="number" value="101" step="1" min="20" max="2001" />
-
-    <label for="xlabel">X-axis label</label>
-    <input id="xlabel" type="text" value="Abatement (units)" />
-
-    <label for="ylabel">Y-axis label</label>
-    <input id="ylabel" type="text" value="Marginal abatement cost (currency / unit)" />
+    <div class="note">
+      Model: <b>MAC(x) = intercept + slope · x</b>. Edit values in the table below.
+    </div>
   </div>
 
-  <div class="actions">
-    <button class="primary" id="genAllBtn">Generate ALL provinces (defaults)</button>
-    <button class="primary" id="updateOneBtn">Update selected province</button>
-    <button id="resetOneBtn">Reset selected province to default</button>
-    <button id="clearBtn">Clear all figures</button>
+  <div class="panel">
+    <h2 style="margin:0 0 10px 0;">Province parameters (editable)</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Province</th>
+            <th class="num">Intercept<br><small>cost at x=0</small></th>
+            <th class="num">Slope<br><small>per unit abatement</small></th>
+            <th class="num">Sigma<br><small>stored only</small></th>
+          </tr>
+        </thead>
+        <tbody id="paramBody"></tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      Tip: You can quickly tab through cells to edit many provinces.
+    </div>
   </div>
 
-  <div class="note">
-    Model: <span class="small"><b>MAC(x) = intercept + slope · x</b></span>.
-    <b>Sigma is recorded but not displayed on the plot</b>.
-  </div>
-</div>
+  <h2 style="margin: 14px 0 8px 0;">MACC plots</h2>
+  <div id="plots" class="plots"></div>
 
-<h2>Province figures</h2>
-<div id="cards" class="cards"></div>
-
-<footer>
-  © Yuhang Pan · Hosted on GitHub Pages · Plotly.js
-</footer>
+  <footer>
+    © Yuhang Pan · Hosted on GitHub Pages · Plotly.js
+  </footer>
 
 <script>
   // Provinces (excluding Tibet)
   const PROVINCES = [
-    "Beijing", "Tianjin", "Hebei", "Shanxi", "Inner Mongolia",
-    "Liaoning", "Jilin", "Heilongjiang",
-    "Shanghai", "Jiangsu", "Zhejiang", "Anhui", "Fujian", "Jiangxi", "Shandong",
-    "Henan", "Hubei", "Hunan", "Guangdong", "Guangxi", "Hainan",
-    "Chongqing", "Sichuan", "Guizhou", "Yunnan",
-    "Shaanxi", "Gansu", "Qinghai", "Ningxia", "Xinjiang"
+    "Beijing","Tianjin","Hebei","Shanxi","Inner Mongolia",
+    "Liaoning","Jilin","Heilongjiang",
+    "Shanghai","Jiangsu","Zhejiang","Anhui","Fujian","Jiangxi","Shandong",
+    "Henan","Hubei","Hunan","Guangdong","Guangxi","Hainan",
+    "Chongqing","Sichuan","Guizhou","Yunnan",
+    "Shaanxi","Gansu","Qinghai","Ningxia","Xinjiang"
   ];
 
-  // Default parameter template
-  function defaultParams() {
-    return {
-      intercept: 0,
-      slope: 1,
-      sigma: 5,      // stored only
-      amax: 100,
-      npts: 101,
-      xlabel: "Abatement (units)",
-      ylabel: "Marginal abatement cost (currency / unit)"
-    };
-  }
+  // Default values (you can later replace this object with province-specific defaults)
+  const DEFAULT = { intercept: 0, slope: 1, sigma: 5 };
 
-  // Store params per province
-  const store = new Map();
+  // State per province
+  const state = new Map();
 
   function $(id){ return document.getElementById(id); }
 
-  function populateProvinces(){
-    const sel = $("province");
-    sel.innerHTML = "";
+  function linspace(a,b,n){
+    if (n <= 1) return [a];
+    const step = (b - a) / (n - 1);
+    return Array.from({length:n}, (_,i)=> a + i*step);
+  }
+
+  function readGlobal(){
+    return {
+      amax: Number($("amax").value),
+      npts: Number($("npts").value),
+      cols: Number($("cols").value),
+      sameY: $("sameY").value
+    };
+  }
+
+  function ensureState(){
     for (const p of PROVINCES){
-      const opt = document.createElement("option");
-      opt.value = p;
-      opt.textContent = p;
-      sel.appendChild(opt);
+      if (!state.has(p)) state.set(p, {...DEFAULT});
     }
   }
 
-  function linspace(start, end, n){
-    const arr = [];
-    if (n <= 1) return [start];
-    const step = (end - start) / (n - 1);
-    for (let i = 0; i < n; i++) arr.push(start + i * step);
-    return arr;
+  function setGridColumns(cols){
+    // 3–5 plots per row, responsive
+    $("plots").style.gridTemplateColumns = `repeat(${cols}, minmax(240px, 1fr))`;
   }
 
-  function computeSeries(params){
-    const x = linspace(0, params.amax, params.npts);
-    const y = x.map(v => params.intercept + params.slope * v);
-    return { x, y };
+  function buildTable(){
+    const tbody = $("paramBody");
+    tbody.innerHTML = "";
+
+    for (const p of PROVINCES){
+      const v = state.get(p);
+      const safeId = p.replace(/\s+/g,"-").toLowerCase();
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><b>${p}</b></td>
+        <td class="num">
+          <input type="number" step="0.1" value="${v.intercept}"
+                 data-prov="${p}" data-key="intercept" id="i-${safeId}">
+        </td>
+        <td class="num">
+          <input type="number" step="0.1" value="${v.slope}"
+                 data-prov="${p}" data-key="slope" id="s-${safeId}">
+        </td>
+        <td class="num">
+          <input type="number" step="0.1" min="0" value="${v.sigma}"
+                 data-prov="${p}" data-key="sigma" id="g-${safeId}">
+        </td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    // Event delegation: update state + replot that province on input
+    tbody.addEventListener("input", (e) => {
+      const el = e.target;
+      if (!el || !el.dataset || !el.dataset.prov) return;
+
+      const prov = el.dataset.prov;
+      const key  = el.dataset.key;
+      const val  = Number(el.value);
+
+      const cur = state.get(prov) || {...DEFAULT};
+      cur[key] = val;
+      state.set(prov, cur);
+
+      // Update only that province plot (fast)
+      renderProvincePlot(prov);
+      // If using common y-range, refresh all (to keep axes consistent)
+      if (readGlobal().sameY === "common") renderAllPlots();
+    }, { passive: true });
   }
 
-  function plotProvince(divId, province, params){
-    const { x, y } = computeSeries(params);
+  function ensurePlotCards(){
+    const plots = $("plots");
+    plots.innerHTML = "";
+    for (const p of PROVINCES){
+      const safeId = p.replace(/\s+/g,"-").toLowerCase();
+      const card = document.createElement("div");
+      card.className = "plot-card";
+      card.innerHTML = `
+        <div class="plot-title">
+          <span>${p}</span>
+          <span class="plot-meta" id="meta-${safeId}"></span>
+        </div>
+        <div id="plot-${safeId}" class="plot"></div>
+      `;
+      plots.appendChild(card);
+    }
+  }
+
+  function computeYRangeCommon(global){
+    // Compute y min/max across all provinces for consistent y-axis
+    const x = linspace(0, global.amax, global.npts);
+    let ymin = Infinity, ymax = -Infinity;
+
+    for (const p of PROVINCES){
+      const v = state.get(p);
+      const y = x.map(xx => v.intercept + v.slope * xx);
+      for (const yy of y){
+        if (yy < ymin) ymin = yy;
+        if (yy > ymax) ymax = yy;
+      }
+    }
+
+    // Add padding
+    if (!isFinite(ymin) || !isFinite(ymax)) return null;
+    const pad = 0.05 * (ymax - ymin || 1);
+    return [ymin - pad, ymax + pad];
+  }
+
+  function renderProvincePlot(prov, commonYRange=null){
+    const global = readGlobal();
+    const v = state.get(prov);
+
+    const safeId = prov.replace(/\s+/g,"-").toLowerCase();
+    const divId = `plot-${safeId}`;
+
+    const x = linspace(0, global.amax, global.npts);
+    const y = x.map(xx => v.intercept + v.slope * xx);
+
+    $("meta-" + safeId).textContent =
+      `a=${v.intercept}, b=${v.slope}, σ=${v.sigma}`;
 
     const trace = {
       x, y,
       type: "scatter",
       mode: "lines",
-      line: { width: 3 },
+      line: { width: 2 },
       name: "MACC"
     };
 
     const layout = {
-      title: { text: `${province}: Marginal Abatement Cost Curve (MACC)`, x: 0.02 },
-      margin: { t: 50, r: 20, b: 55, l: 70 },
-      xaxis: { title: params.xlabel },
-      yaxis: { title: params.ylabel },
-      legend: { orientation: "h", x: 0.02, y: 1.12 }
+      margin: { t: 18, r: 10, b: 34, l: 44 },
+      xaxis: { title: "Abatement", tickfont: {size: 11}, titlefont: {size: 12} },
+      yaxis: { title: "MAC", tickfont: {size: 11}, titlefont: {size: 12} },
+      showlegend: false
     };
 
-    Plotly.newPlot(divId, [trace], layout, {responsive: true});
+    if (commonYRange) layout.yaxis.range = commonYRange;
+
+    Plotly.newPlot(divId, [trace], layout, {responsive: true, displayModeBar: false});
   }
 
-  function ensureCard(province){
-    const id = `card-${province.replace(/\s+/g, "-").toLowerCase()}`;
-    let card = document.getElementById(id);
+  function renderAllPlots(){
+    const global = readGlobal();
+    setGridColumns(global.cols);
 
-    if (!card){
-      card = document.createElement("div");
-      card.className = "card";
-      card.id = id;
+    const commonY = (global.sameY === "common") ? computeYRangeCommon(global) : null;
 
-      const h = document.createElement("h3");
-      h.innerHTML = `<span>${province}</span><span class="small">Figure</span>`;
-      card.appendChild(h);
-
-      const meta = document.createElement("div");
-      meta.className = "meta";
-      meta.id = `${id}-meta`;
-      card.appendChild(meta);
-
-      const plot = document.createElement("div");
-      plot.className = "plot";
-      plot.id = `${id}-plot`;
-      card.appendChild(plot);
-
-      $("cards").appendChild(card);
-    }
-
-    return { cardId: id, plotId: `${id}-plot`, metaId: `${id}-meta` };
-  }
-
-  function writeMeta(metaId, params){
-    // sigma is shown here for record-keeping (but not plotted)
-    document.getElementById(metaId).textContent =
-      `Intercept=${params.intercept}, Slope=${params.slope}, Sigma=${params.sigma} · ` +
-      `X max=${params.amax}, Points=${params.npts}`;
-  }
-
-  function readInputs(){
-    return {
-      intercept: Number($("intercept").value),
-      slope: Number($("slope").value),
-      sigma: Number($("sigma").value),
-      amax: Number($("amax").value),
-      npts: Number($("npts").value),
-      xlabel: $("xlabel").value || "Abatement (units)",
-      ylabel: $("ylabel").value || "Marginal abatement cost (currency / unit)"
-    };
-  }
-
-  function loadInputsFromProvince(province){
-    const params = store.get(province) || defaultParams();
-    $("intercept").value = params.intercept;
-    $("slope").value = params.slope;
-    $("sigma").value = params.sigma;
-    $("amax").value = params.amax;
-    $("npts").value = params.npts;
-    $("xlabel").value = params.xlabel;
-    $("ylabel").value = params.ylabel;
-  }
-
-  function updateSelectedProvince(){
-    const p = $("province").value;
-    const params = readInputs();
-    store.set(p, params);
-
-    const { plotId, metaId } = ensureCard(p);
-    writeMeta(metaId, params);
-    plotProvince(plotId, p, params);
-  }
-
-  function resetSelectedProvince(){
-    const p = $("province").value;
-    const params = defaultParams();
-    store.set(p, params);
-    loadInputsFromProvince(p);
-
-    const { plotId, metaId } = ensureCard(p);
-    writeMeta(metaId, params);
-    plotProvince(plotId, p, params);
-  }
-
-  function generateAllDefaults(){
-    // Fill store with defaults, then render all
     for (const p of PROVINCES){
-      if (!store.has(p)) store.set(p, defaultParams());
-      const params = store.get(p);
-
-      const { plotId, metaId } = ensureCard(p);
-      writeMeta(metaId, params);
-      plotProvince(plotId, p, params);
+      renderProvincePlot(p, commonY);
     }
   }
 
-  function clearAll(){
-    store.clear();
-    $("cards").innerHTML = "";
+  function resetAll(){
+    for (const p of PROVINCES) state.set(p, {...DEFAULT});
+    buildTable();      // rebuild inputs to reflect defaults
+    ensurePlotCards(); // rebuild plot containers
+    renderAllPlots();
   }
 
   // Init
-  populateProvinces();
+  ensureState();
+  buildTable();
+  ensurePlotCards();
+  renderAllPlots();
 
-  // Initialize store with defaults (but do not render until user clicks Generate All)
-  for (const p of PROVINCES) store.set(p, defaultParams());
-
-  // Load inputs for the first province
-  loadInputsFromProvince($("province").value);
-
-  $("province").addEventListener("change", () => {
-    loadInputsFromProvince($("province").value);
-  });
-
-  $("genAllBtn").addEventListener("click", generateAllDefaults);
-  $("updateOneBtn").addEventListener("click", updateSelectedProvince);
-  $("resetOneBtn").addEventListener("click", resetSelectedProvince);
-  $("clearBtn").addEventListener("click", clearAll);
+  // Buttons / global controls
+  $("renderAll").addEventListener("click", renderAllPlots);
+  $("resetDefaults").addEventListener("click", resetAll);
+  $("cols").addEventListener("change", renderAllPlots);
+  $("sameY").addEventListener("change", renderAllPlots);
+  $("amax").addEventListener("change", renderAllPlots);
+  $("npts").addEventListener("change", renderAllPlots);
 </script>
 
 </body>
