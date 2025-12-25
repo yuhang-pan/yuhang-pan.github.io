@@ -179,6 +179,20 @@ Edit parameters in the table. MACC plots update automatically.
   </div>
 </div>
 
+<div class="panel">
+  <h2 style="margin:0 0 10px 0;">Aggregate welfare loss</h2>
+  <p style="margin-top:4px;">
+    The bar chart compares welfare loss under the
+    <em>Plan</em> scenario (σ<sub>i</sub>) and the
+    <em>Market</em> scenario (x<sub>i</sub>).
+  </p>
+
+  <button id="calcW">Compute welfare</button>
+
+  <div id="wBar" style="height:260px; max-width:520px; margin-top:10px;"></div>
+  <div id="wResult" style="margin-top:8px; font-size:14px;"></div>
+</div>
+
 <h2>MACC plots</h2>
 <div id="plots" class="plots"></div>
 
@@ -310,6 +324,77 @@ PROVINCES.forEach(p=>{
 
 renderAll();
 
+function computeWelfare() {
+
+  const slopes = [];
+  const sigmas = [];
+  const xs = [];
+
+  for (const prov of PROVINCES) {
+    const v = state.get(prov);
+    const c = v.slope;
+    const s = v.sigma;
+    const x = v.x;
+
+    if (c > 0 && Number.isFinite(c)) {
+      slopes.push(c);
+      sigmas.push(Number.isFinite(s) ? s : 0);
+      xs.push(Number.isFinite(x) ? x : 0);
+    }
+  }
+
+  const N = slopes.length;
+  if (N === 0) {
+    $("wResult").textContent =
+      "Cannot compute: no province with positive slope.";
+    Plotly.purge("wBar");
+    return;
+  }
+
+  // weights
+  const invC = slopes.map(c => 1 / c);
+  const S = invC.reduce((a,b)=>a+b,0);
+  const w = invC.map(v => v / S);
+
+  // --- Plan welfare ---
+  let Vtheta = 0;
+  for (let i = 0; i < N; i++) {
+    Vtheta += w[i] * (1 - w[i]) * sigmas[i] * sigmas[i];
+  }
+  const deltaWPlan = 0.5 * S * Vtheta;
+
+  // --- Market welfare ---
+  let xbar = 0;
+  for (let i = 0; i < N; i++) xbar += w[i] * xs[i];
+
+  let Dx = 0;
+  for (let i = 0; i < N; i++) {
+    const d = xs[i] - xbar;
+    Dx += w[i] * d * d;
+  }
+  const deltaWMarket = 0.5 * S * Dx;
+
+  // --- bar chart ---
+  Plotly.newPlot("wBar", [{
+    x: ["Plan","Market"],
+    y: [deltaWPlan, deltaWMarket],
+    type: "bar",
+    text: [deltaWPlan, deltaWMarket].map(v => v.toFixed(3)),
+    textposition: "outside"
+  }], {
+    margin:{t:30,r:10,b:40,l:60},
+    yaxis:{title:"Welfare loss"},
+  }, {displayModeBar:false});
+
+  // --- display text summary ---
+  $("wResult").innerHTML =
+    `Provinces used: ${N}<br>` +
+    `S = ${S.toFixed(4)}, V\u03B8 = ${Vtheta.toFixed(4)}, ` +
+    `D<sub>x</sub> = ${Dx.toFixed(4)}<br>` +
+    `ΔW<sup>Plan</sup> ≈ <b>${deltaWPlan.toFixed(4)}</b>, ` +
+    `ΔW<sup>Market</sup> ≈ <b>${deltaWMarket.toFixed(4)}</b>`;
+}
+
 /* ---------- EVENTS ---------- */
 ["amax","npts","cols","sameY"].forEach(id=>{
   $(id).addEventListener("change", renderAll);
@@ -321,7 +406,14 @@ $("resetAll").onclick = ()=>{
   buildTable();
   renderAll();
 };
+
+$("calcW").onclick = computeWelfare;
+
 </script>
+
+
+
+
 
 </body>
 </html>
