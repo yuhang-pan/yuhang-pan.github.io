@@ -211,7 +211,38 @@ const PROVINCES = [
   "Shaanxi","Gansu","Qinghai","Ningxia","Xinjiang"
 ];
 
-const DEFAULT = { intercept:0, slope:1, sigma:5, x:0 };
+const DEFAULTS = {
+  "Ningxia":        { intercept: 0.0969173, slope: 388.7702, sigma: 11.22568, x: 8.462444 },
+  "Fujian":         { intercept: 1.728792,  slope: 364.0056, sigma: 22.26661, x: 46.1823 },
+  "Henan":          { intercept: 1.496045,  slope: 123.0015, sigma: 93.32495, x: 94.28677 },
+  "Guangxi":        { intercept: 1.338495,  slope: 563.3428, sigma: 21.49690, x: 37.56079 },
+  "Yunnan":         { intercept: 3.955799,  slope: 384.8373, sigma: 52.56854, x: 38.02209 },
+  "Jiangsu":        { intercept: 0.2859142, slope: 251.0002, sigma: 18.41771, x: 80.89072 },
+  "Hainan":         { intercept: 0.6471579, slope: 462.3269, sigma: 5.113141, x: 10.25463 },
+  "Hubei":          { intercept: 1.093514,  slope: 295.0746, sigma: 42.91271, x: 88.60152 },
+  "Shandong":       { intercept: 0.5592239, slope: 263.8553, sigma: 28.84925, x: 36.29885 },
+  "Sichuan":        { intercept: 0.8150355, slope: 381.5338, sigma: 5.629647, x: 90.56181 },
+  "Tianjin":        { intercept: 3.979701,  slope: 456.1849, sigma: 21.93646, x: 56.25079 },
+  "Gansu":          { intercept: 0.4718419, slope: 410.8334, sigma: 9.100637, x: 25.20455 },
+  "Hebei":          { intercept: 0.7405924, slope: 300.8457, sigma: 5.774339, x: 45.84569 },
+  "Hunan":          { intercept: 0.9044383, slope: 388.124,  sigma: 5.655239, x: 111.783 },
+  "Heilongjiang":   { intercept: 0.8373291, slope: 336.4144, sigma: 9.651719, x: 17.74529 },
+  "Shanxi":         { intercept: 0.2508018, slope: 174.4202, sigma: 27.94556, x: 6.610334 },
+  "Jiangxi":        { intercept: 0.571995,  slope: 413.7971, sigma: 3.081146, x: 78.97498 },
+  "Shanghai":       { intercept: 4.087292,  slope: 448.4839, sigma: 37.00269, x: 69.0893 },
+  "Guizhou":        { intercept: 0.6300412, slope: 347.6277, sigma: 3.452188, x: 21.58498 },
+  "Zhejiang":       { intercept: 0.7460558, slope: 334.93,   sigma: 36.70445, x: 49.31145 },
+  "Inner Mongolia": { intercept: 0.1640011, slope: 256.6075, sigma: 49.08710, x: 7.037306 },
+  "Beijing":        { intercept: 7.530193,  slope: 530.3611, sigma: 27.72600, x: 122.1807 },
+  "Xinjiang":       { intercept: 0.1610102, slope: 344.4266, sigma: 15.78127, x: 15.25468 },
+  "Qinghai":        { intercept: 1.427224,  slope: 461.8694, sigma: 4.788465, x: 22.45286 },
+  "Jilin":          { intercept: 1.349814,  slope: 480.1877, sigma: 20.19012, x: 29.6993 },
+  "Liaoning":       { intercept: 0.9062255, slope: 370.3769, sigma: 40.79853, x: 22.08256 },
+  "Shaanxi":        { intercept: 0.3336013, slope: 298.8889, sigma: 5.547025, x: 30.49408 },
+  "Guangdong":      { intercept: 1.134459,  slope: 155.2219, sigma: 47.52580, x: 59.77705 },
+  "Chongqing":      { intercept: 0.6776533, slope: 401.4827, sigma: 8.692573, x: 103.7286 },
+  "Anhui":          { intercept: 0.3809696, slope: 348.9635, sigma: 3.740448, x: 52.86329 }
+};
 const state = new Map();
 
 /* ---------- HELPERS ---------- */
@@ -305,7 +336,14 @@ function renderAll(){
 }
 
 /* ---------- INIT ---------- */
-ensureState();
+function ensureState(){
+  PROVINCES.forEach(p=>{
+    if (!state.has(p)) {
+      const d = DEFAULTS[p] || { intercept:0, slope:1, sigma:5, x:0 };
+      state.set(p, { ...d });
+    }
+  });
+}
 buildTable();
 
 // build plot cards
