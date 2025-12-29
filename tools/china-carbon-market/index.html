@@ -212,37 +212,38 @@ const PROVINCES = [
   "Shaanxi","Gansu","Qinghai","Ningxia","Xinjiang"
 ];
 
+// par_a = slope, b_ = intercept, p_sigma = sigma, x = x_i_d
 const DEFAULTS = {
-  "Ningxia":        { intercept: 0.0969173, slope: 388.7702, sigma: 11.22568, x: 8.462444 },
-  "Fujian":         { intercept: 1.728792,  slope: 364.0056, sigma: 22.26661, x: 46.1823 },
-  "Henan":          { intercept: 1.496045,  slope: 123.0015, sigma: 93.32495, x: 94.28677 },
-  "Guangxi":        { intercept: 1.338495,  slope: 563.3428, sigma: 21.49690, x: 37.56079 },
-  "Yunnan":         { intercept: 3.955799,  slope: 384.8373, sigma: 52.56854, x: 38.02209 },
-  "Jiangsu":        { intercept: 0.2859142, slope: 251.0002, sigma: 18.41771, x: 80.89072 },
-  "Hainan":         { intercept: 0.6471579, slope: 462.3269, sigma: 5.113141, x: 10.25463 },
-  "Hubei":          { intercept: 1.093514,  slope: 295.0746, sigma: 42.91271, x: 88.60152 },
-  "Shandong":       { intercept: 0.5592239, slope: 263.8553, sigma: 28.84925, x: 36.29885 },
-  "Sichuan":        { intercept: 0.8150355, slope: 381.5338, sigma: 5.629647, x: 90.56181 },
-  "Tianjin":        { intercept: 3.979701,  slope: 456.1849, sigma: 21.93646, x: 56.25079 },
-  "Gansu":          { intercept: 0.4718419, slope: 410.8334, sigma: 9.100637, x: 25.20455 },
-  "Hebei":          { intercept: 0.7405924, slope: 300.8457, sigma: 5.774339, x: 45.84569 },
-  "Hunan":          { intercept: 0.9044383, slope: 388.124,  sigma: 5.655239, x: 111.783 },
-  "Heilongjiang":   { intercept: 0.8373291, slope: 336.4144, sigma: 9.651719, x: 17.74529 },
-  "Shanxi":         { intercept: 0.2508018, slope: 174.4202, sigma: 27.94556, x: 6.610334 },
-  "Jiangxi":        { intercept: 0.571995,  slope: 413.7971, sigma: 3.081146, x: 78.97498 },
-  "Shanghai":       { intercept: 4.087292,  slope: 448.4839, sigma: 37.00269, x: 69.0893 },
-  "Guizhou":        { intercept: 0.6300412, slope: 347.6277, sigma: 3.452188, x: 21.58498 },
-  "Zhejiang":       { intercept: 0.7460558, slope: 334.93,   sigma: 36.70445, x: 49.31145 },
-  "Inner Mongolia": { intercept: 0.1640011, slope: 256.6075, sigma: 49.08710, x: 7.037306 },
-  "Beijing":        { intercept: 7.530193,  slope: 530.3611, sigma: 27.72600, x: 122.1807 },
-  "Xinjiang":       { intercept: 0.1610102, slope: 344.4266, sigma: 15.78127, x: 15.25468 },
-  "Qinghai":        { intercept: 1.427224,  slope: 461.8694, sigma: 4.788465, x: 22.45286 },
-  "Jilin":          { intercept: 1.349814,  slope: 480.1877, sigma: 20.19012, x: 29.6993 },
-  "Liaoning":       { intercept: 0.9062255, slope: 370.3769, sigma: 40.79853, x: 22.08256 },
-  "Shaanxi":        { intercept: 0.3336013, slope: 298.8889, sigma: 5.547025, x: 30.49408 },
-  "Guangdong":      { intercept: 1.134459,  slope: 155.2219, sigma: 47.52580, x: 59.77705 },
-  "Chongqing":      { intercept: 0.6776533, slope: 401.4827, sigma: 8.692573, x: 103.7286 },
-  "Anhui":          { intercept: 0.3809696, slope: 348.9635, sigma: 3.740448, x: 52.86329 }
+  "Beijing":        { intercept: 539.8556, slope: 6.126031,  sigma: 24.87443, x: 122.1807 },
+  "Tianjin":        { intercept: 452.3536, slope: 5.670226,  sigma: 69.82859, x: 56.25079 },
+  "Hebei":          { intercept: 274.0722, slope: 1.008904,  sigma: 13.71587, x: 45.84569 },
+  "Shanxi":         { intercept: 200.7112, slope: 0.2363099, sigma: 14.84631, x: 6.610334 },
+  "Inner Mongolia": { intercept: 245.7678, slope: 0.2184774, sigma: 46.92051, x: 7.037306 },
+  "Liaoning":       { intercept: 367.242,  slope: 1.004537,  sigma: 38.79958, x: 22.08256 },
+  "Jilin":          { intercept: 476.0138, slope: 1.49935,   sigma: 25.41686, x: 29.6993 },
+  "Heilongjiang":   { intercept: 310.1459, slope: 2.049578,  sigma: 47.11966, x: 17.74529 },
+  "Shanghai":       { intercept: 430.6986, slope: 3.832835,  sigma: 34.2805,  x: 69.0893 },
+  "Jiangsu":        { intercept: 250.3181, slope: 0.2877057, sigma: 19.34903, x: 80.89072 },
+  "Zhejiang":       { intercept: 295.3029, slope: 0.8898162, sigma: 20.19799, x: 49.31145 },
+  "Anhui":          { intercept: 351.0626, slope: 0.4619031, sigma: 3.712904, x: 52.86329 },
+  "Fujian":         { intercept: 344.2798, slope: 1.966559,  sigma: 32.60881, x: 46.1823 },
+  "Jiangxi":        { intercept: 413.6429, slope: 0.5877364, sigma: 3.117374, x: 78.97498 },
+  "Shandong":       { intercept: 282.4941, slope: 0.3005409, sigma: 28.97885, x: 36.29885 },
+  "Henan":          { intercept: 80.14156, slope: 1.716878,  sigma: 106.8801, x: 94.28677 },
+  "Hubei":          { intercept: 279.3998, slope: 1.256144,  sigma: 48.30138, x: 88.60152 },
+  "Hunan":          { intercept: 387.7501, slope: 0.9136508, sigma: 5.756722, x: 111.783 },
+  "Guangdong":      { intercept: 149.3489, slope: 1.599119,  sigma: 63.4676,  x: 59.77705 },
+  "Guangxi":        { intercept: 561.2491, slope: 3.019373,  sigma: 29.64063, x: 37.56079 },
+  "Hainan":         { intercept: 441.4328, slope: 1.651233,  sigma: 2.727241, x: 10.25463 },
+  "Chongqing":      { intercept: 397.2082, slope: 0.7610655, sigma: 9.485044, x: 103.7286 },
+  "Sichuan":        { intercept: 378.5916, slope: 0.8831162, sigma: 6.729673, x: 90.56181 },
+  "Guizhou":        { intercept: 343.373,  slope: 0.5974529, sigma: 4.296515, x: 21.58498 },
+  "Yunnan":         { intercept: 384.5961, slope: 3.95873,   sigma: 52.61304, x: 38.02209 },
+  "Shaanxi":        { intercept: 308.627,  slope: 0.3432761, sigma: 4.111628, x: 30.49408 },
+  "Gansu":          { intercept: 407.8557, slope: 0.7375261, sigma: 7.145037, x: 25.20455 },
+  "Qinghai":        { intercept: 461.6647, slope: 1.503946,  sigma: 5.053359, x: 22.45286 },
+  "Ningxia":        { intercept: 388.0527, slope: 0.1111859, sigma: 11.18133, x: 8.462444 },
+  "Xinjiang":       { intercept: 333.6209, slope: 0.4581843, sigma: 11.68135, x: 15.25468 }
 };
 
 const state = new Map();
@@ -338,7 +339,7 @@ function renderAll(){
   PROVINCES.forEach(p=>renderProvince(p, commonY));
 }
 
-/* ---------- WELFARE ---------- */
+/* ---------- WELFARE (SHORT-RUN, BILLION USD) ---------- */
 function computeWelfare() {
 
   const slopes = [];
@@ -347,9 +348,9 @@ function computeWelfare() {
 
   for (const prov of PROVINCES) {
     const v = state.get(prov);
-    const c = v.slope;
-    const s = v.sigma;
-    const x = v.x;
+    const c = v.slope;   // par_a
+    const s = v.sigma;   // p_sigma
+    const x = v.x;       // x_i_d
 
     if (c > 0 && Number.isFinite(c)) {
       slopes.push(c);
@@ -366,19 +367,19 @@ function computeWelfare() {
     return;
   }
 
-  // weights
+  // weights and S (S = sum 1/c_i')
   const invC = slopes.map(c => 1 / c);
   const S = invC.reduce((a,b)=>a+b,0);
   const w = invC.map(v => v / S);
 
-  // --- Plan welfare ---
+  // Plan welfare: diff_W_n = 0.5 * S * V_theta
   let Vtheta = 0;
   for (let i = 0; i < N; i++) {
     Vtheta += w[i] * (1 - w[i]) * sigmas[i] * sigmas[i];
   }
-  const deltaWPlan = 0.5 * S * Vtheta;
+  const deltaWPlan_raw = 0.5 * S * Vtheta;
 
-  // --- Market welfare ---
+  // Market welfare (scenario d): diff_W_m_d = 0.5 * S * D_x
   let xbar = 0;
   for (let i = 0; i < N; i++) xbar += w[i] * xs[i];
 
@@ -387,27 +388,34 @@ function computeWelfare() {
     const d = xs[i] - xbar;
     Dx += w[i] * d * d;
   }
-  const deltaWMarket = 0.5 * S * Dx;
+  const deltaWMarket_raw = 0.5 * S * Dx;
 
-  // --- bar chart ---
+  // convert to Billion USD (consistent with your Stata /1000)
+  const scale = 1/1000;
+  const deltaWPlan   = deltaWPlan_raw   * scale;
+  const deltaWMarket = deltaWMarket_raw * scale;
+
+  // bar chart (Plotly style)
   Plotly.newPlot("wBar", [{
     x: ["Plan","Market"],
     y: [deltaWPlan, deltaWMarket],
     type: "bar",
-    text: [deltaWPlan, deltaWMarket].map(v => v.toFixed(3)),
+    text: [deltaWPlan, deltaWMarket].map(v => v.toFixed(2)), // 两位小数，自动补 0
     textposition: "outside"
   }], {
-    margin:{t:30,r:10,b:40,l:60},
-    yaxis:{title:"Welfare loss"},
+    margin:{t:30,r:10,b:40,l:70},
+    yaxis:{title:"Welfare Loss, Billion USD"},
   }, {displayModeBar:false});
 
-  // --- display text summary ---
+  // text summary
   $("wResult").innerHTML =
     `Provinces used: ${N}<br>` +
     `S = ${S.toFixed(4)}, V\u03B8 = ${Vtheta.toFixed(4)}, ` +
     `D<sub>x</sub> = ${Dx.toFixed(4)}<br>` +
-    `ΔW<sup>Plan</sup> ≈ <b>${deltaWPlan.toFixed(4)}</b>, ` +
-    `ΔW<sup>Market</sup> ≈ <b>${deltaWMarket.toFixed(4)}</b>`;
+    `ΔW<sup>Plan</sup> ≈ ${deltaWPlan_raw.toFixed(2)} (level), ` +
+    `<b>${deltaWPlan.toFixed(2)}</b> billion USD<br>` +
+    `ΔW<sup>Market</sup> ≈ ${deltaWMarket_raw.toFixed(2)} (level), ` +
+    `<b>${deltaWMarket.toFixed(2)}</b> billion USD`;
 }
 
 /* ---------- INIT ---------- */
@@ -443,6 +451,7 @@ $("resetAll").onclick = ()=>{
 };
 $("calcW").onclick = computeWelfare;
 </script>
+
 
 </body>
 </html>
