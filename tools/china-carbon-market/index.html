@@ -396,13 +396,27 @@ function computeWelfare() {
   const deltaWMarket = deltaWMarket_raw * scale;
 
   // bar chart (Plotly style)
-  Plotly.newPlot("wBar", [{
-    x: ["Plan","Market"],
-    y: [deltaWPlan, deltaWMarket],
+  Plotly.newPlot("wBar", [
+
+  {
+    x: ["Plan"],
+    y: [deltaWPlan],
     type: "bar",
-    text: [deltaWPlan, deltaWMarket].map(v => v.toFixed(2)), // 两位小数，自动补 0
+    marker: { color: "rgb(200, 40, 40)" },   // 红色 (Plan)
+    text: [deltaWPlan.toFixed(2)],
     textposition: "outside"
-  }], {
+  },
+
+  {
+    x: ["Market"],
+    y: [deltaWMarket],
+    type: "bar",
+    marker: { color: "rgb(40, 90, 160)" },   // 蓝色 (Market)
+    text: [deltaWMarket.toFixed(2)],
+    textposition: "outside"
+  }
+
+], {
     margin:{t:30,r:10,b:40,l:70},
     yaxis:{title:"Welfare Loss, Billion USD"},
   }, {displayModeBar:false});
