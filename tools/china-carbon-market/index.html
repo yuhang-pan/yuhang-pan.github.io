@@ -190,7 +190,7 @@ Edit parameters in the table. MACC plots update automatically.
 
   <button id="calcW">Compute welfare</button>
 
-  <div id="wBar" style="height:260px; max-width:520px; margin-top:10px;"></div>
+  <div id="wBar" style="height:360px; max-width:640px; margin-top:10px;"></div>
   <div id="wResult" style="margin-top:8px; font-size:14px;"></div>
 </div>
 
@@ -270,12 +270,28 @@ function buildTable(){
     const v = state.get(p);
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><b>${p}</b></td>
-      <td class="num"><input type="number" step="0.1" value="${v.intercept}" data-p="${p}" data-k="intercept"></td>
-      <td class="num"><input type="number" step="0.1" value="${v.slope}" data-p="${p}" data-k="slope"></td>
-      <td class="num"><input type="number" step="0.1" value="${v.sigma}" data-p="${p}" data-k="sigma"></td>
-      <td class="num"><input type="number" step="0.1" value="${v.x}" data-p="${p}" data-k="x"></td>
-    `;
+  <td><b>${p}</b></td>
+  <td class="num">
+    <input type="number" step="0.1"
+           value="${v.intercept.toFixed(2)}"
+           data-p="${p}" data-k="intercept">
+  </td>
+  <td class="num">
+    <input type="number" step="0.1"
+           value="${v.slope.toFixed(2)}"
+           data-p="${p}" data-k="slope">
+  </td>
+  <td class="num">
+    <input type="number" step="0.1"
+           value="${v.sigma.toFixed(2)}"
+           data-p="${p}" data-k="sigma">
+  </td>
+  <td class="num">
+    <input type="number" step="0.1"
+           value="${v.x.toFixed(2)}"
+           data-p="${p}" data-k="x">
+  </td>
+`;
     tbody.appendChild(tr);
   });
 
@@ -418,7 +434,16 @@ function computeWelfare() {
 
 ], {
     margin:{t:30,r:10,b:40,l:70},
+
+    xaxis:{
+      tickmode:"array",
+      tickvals:["Plan","Market"],
+      ticktext:["\u0394W^{Plan}","\u0394W^{Market}"]
+    },
+
     yaxis:{title:"Welfare Loss, Billion USD"},
+
+    showlegend:false          // ← 明确关掉 legend
   }, {displayModeBar:false});
 
   // text summary
